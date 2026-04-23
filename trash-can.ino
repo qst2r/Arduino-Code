@@ -1,35 +1,27 @@
-/*
-  Smart Trash Can – Enhanced Version (Based on Original Code)
 
-  NEW FEATURES:
-  - LED status indicators
-  - Anti-spam delay
-  - Ultrasonic timeout safety
-  - Fixed if-statement logic
-*/
 
 #include <Servo.h>
 
-// ================= SERVO =================
+
 Servo servo;
 const int servoPin = 9;
 const int openAngle = 0;
 const int closeAngle = 90;
 
-// ================= ULTRASONIC =================
+
 const int trigPin = 5;
 const int echoPin = 6;
 long distance, averageDistance;
 long averDist[3];
 
-// ================= THRESHOLD =================
+
 const int distanceThreshold = 20;
 
-// ================= NEW: LED PINS =================
+
 const int redLED = 10;    // Lid open
 const int greenLED = 11; // Lid closed
 
-// ================= NEW: ANTI-SPAM TIMER =================
+
 unsigned long lastActionTime = 0;
 const unsigned long cooldownTime = 4000; // ms
 
@@ -66,7 +58,7 @@ void loop() {
   // NEW: cooldown check
   if (millis() - lastActionTime < cooldownTime) return;
 
-  // ================= FIXED IF LOGIC =================
+
   if (averageDistance <= distanceThreshold) {
 
     servo.attach(servoPin);
@@ -90,7 +82,7 @@ void loop() {
   }
 }
 
-// ================= FUNCTION =================
+
 float readDistance() {
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -99,7 +91,7 @@ float readDistance() {
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  // NEW: timeout added
+
   long duration = pulseIn(echoPin, HIGH, 25000);
   if (duration == 0) return 999;
 
